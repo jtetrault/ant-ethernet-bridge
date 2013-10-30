@@ -46,7 +46,7 @@ namespace ANTBridge
             try
             {
                 Device = new ANT_Device();
-                // Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
+                Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
                 Console.WriteLine("Done!");
             }
             catch (ANT_Exception ex)
@@ -101,6 +101,28 @@ namespace ANTBridge
                     Console.WriteLine(BitConverter.ToString(response.getDataPayload()));
                     break;
 
+                // Handle ANT Channel Responses
+                case ANT_ReferenceLibrary.ANTMessageID.RESPONSE_EVENT_0x40:
+                    /**************************************
+                     * Expected data payload:
+                     * 
+                     * |0   |1   |2   |3   |
+                     * ---------------------
+                     * | C# | 1  |Evnt| ext|
+                     * ---------------------
+                     *************************************/
+                    switch ((ANT_ReferenceLibrary.ANTEventID)response.messageContents[2])
+                    {
+                        case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_SEARCH_TIMEOUT_0x01:
+                            Console.WriteLine("Unable to connect to remote channel. Re-opening channel.");
+                            Channel.openChannel(500);
+                            break;
+                        case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_0x02:
+                            Console.WriteLine("Missed an expected Rx");
+                            break;
+                    }
+                    break;
+
                 // Display information for unrecognized messages.
                 default:
                     Console.WriteLine("Unrecognized Message: " + response.responseID.ToString("X"));
@@ -113,8 +135,12 @@ namespace ANTBridge
         /// </summary>
         public void DeviceResponseHandler(ANT_Response response)
         {
-            Console.WriteLine(response.getDataPayload());
+            
         }
+
+        /*********************************************************************/
+        /*** Internal Methods ************************************************/
+        /*********************************************************************/
 
         /*********************************************************************/
         /*** Instance Variables **********************************************/

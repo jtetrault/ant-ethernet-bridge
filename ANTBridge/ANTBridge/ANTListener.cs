@@ -41,18 +41,33 @@ namespace ANTBridge
         /// </summary>
         public ANTListener()
         {
-            // Automatically finds a connect ANT USB device.
-            Console.Write("Initialize ANT Device... ");
-            Device = new ANT_Device();
-            // Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
-            Console.WriteLine("Done!");
+            // Automatically find and connect connect ANT USB device.
+            Console.Write("Initializing ANT Device... ");
+            try
+            {
+                Device = new ANT_Device();
+                // Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
+                Console.WriteLine("Done!");
+            }
+            catch (ANT_Exception ex)
+            {
+                Console.WriteLine("Failed!");
+                throw ex;
+            }
 
             // Get a channel object to work with and install a handler for channel messages.
             Console.Write("Initializing ANT Channel... ");
-            Channel = Device.getChannel(CHANNEL_NUMBER);
-            Channel.channelResponse += new dChannelResponseHandler(this.ChannelResponseHandler);
-            Console.WriteLine("Done!");
-
+            try
+            {
+                Channel = Device.getChannel(CHANNEL_NUMBER);
+                Channel.channelResponse += new dChannelResponseHandler(this.ChannelResponseHandler);
+                Console.WriteLine("Done!");
+            }
+            catch (ANT_Exception ex)
+            {
+                Console.WriteLine("Failed!");
+                throw ex;
+            }
             // Configure the Device and Channel with default values.
             Console.Write("Configuring ANT Device and Channel with default values... ");
             if (!Device.setNetworkKey(NETWORK_NUMBER, NETWORK_KEY, 500))

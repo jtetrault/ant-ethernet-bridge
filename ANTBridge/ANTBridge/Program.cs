@@ -10,6 +10,12 @@ namespace ANTBridge
     {
         static void Main(string[] args)
         {
+            ANTBridge bridge = new ANTBridge();
+
+            while (true)
+            {
+
+            }
         }
     }
 }

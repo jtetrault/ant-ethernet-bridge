@@ -42,16 +42,63 @@ namespace ANTBridge
         public ANTListener()
         {
             // Automatically finds a connect ANT USB device.
+            Console.Write("Initialize ANT Device... ");
             Device = new ANT_Device();
+            // Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
+            Console.WriteLine("Done!");
 
-            // Get a channel object to work with.
+            // Get a channel object to work with and install a handler for channel messages.
+            Console.Write("Initializing ANT Channel... ");
             Channel = Device.getChannel(CHANNEL_NUMBER);
+            Channel.channelResponse += new dChannelResponseHandler(this.ChannelResponseHandler);
+            Console.WriteLine("Done!");
 
             // Configure the Device and Channel with default values.
-            Device.setNetworkKey(NETWORK_NUMBER, NETWORK_KEY, 500);
-            Channel.assignChannel(CHANNEL_TYPE, NETWORK_NUMBER);
+            Console.Write("Configuring ANT Device and Channel with default values... ");
+            if (!Device.setNetworkKey(NETWORK_NUMBER, NETWORK_KEY, 500))
+                throw new Exception("Error configuring network key");
+            if (!Channel.assignChannel(CHANNEL_TYPE, NETWORK_NUMBER, 500))
+                throw new Exception("Error assigning channel");
             // Set the Channel ID with wildcard values (to accept connections from any device).
-            Channel.setChannelID(0, false, 0, 0);
+            if (!Channel.setChannelID(0, false, 0, 0, 500))
+                throw new Exception("Error configuring Channel ID");
+            Console.WriteLine("Done!");
+            // Open the channel
+            if(!Channel.openChannel(500))
+                throw new Exception("Error opening Channel");
+            Console.WriteLine("ANT Channel Opened!");
+        }
+
+        /// <summary>
+        /// Handles ANT Channel events.
+        /// </summary>
+        public void ChannelResponseHandler(ANT_Response response)
+        {
+            switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
+            {
+                // Handle received messages
+                case ANT_ReferenceLibrary.ANTMessageID.BROADCAST_DATA_0x4E:
+                case ANT_ReferenceLibrary.ANTMessageID.ACKNOWLEDGED_DATA_0x4F:
+                case ANT_ReferenceLibrary.ANTMessageID.BURST_DATA_0x50:
+                case ANT_ReferenceLibrary.ANTMessageID.EXT_BROADCAST_DATA_0x5D:
+                case ANT_ReferenceLibrary.ANTMessageID.EXT_ACKNOWLEDGED_DATA_0x5E:
+                case ANT_ReferenceLibrary.ANTMessageID.EXT_BURST_DATA_0x5F:
+                    Console.WriteLine(BitConverter.ToString(response.getDataPayload()));
+                    break;
+
+                // Display information for unrecognized messages.
+                default:
+                    Console.WriteLine("Unrecognized Message: " + response.responseID.ToString("X"));
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Handle ANT Device responses.
+        /// </summary>
+        public void DeviceResponseHandler(ANT_Response response)
+        {
+            Console.WriteLine(response.getDataPayload());
         }
 
         /*********************************************************************/

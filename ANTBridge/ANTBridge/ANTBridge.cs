@@ -16,7 +16,7 @@ namespace ANTBridge
         /// </summary>
         public ANTBridge()
         {
-            Listener = new ANTListener();
+            Listener = new ANTListener(response => Console.WriteLine(BitConverter.ToString(response.getDataPayload())));
         }
 
         /*********************************************************************/

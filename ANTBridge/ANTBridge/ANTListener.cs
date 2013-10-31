@@ -20,7 +20,7 @@ namespace ANTBridge
         /// <summary>
         /// The slave (primarily receiving) channel type.
         /// </summary>
-        static readonly ANT_ReferenceLibrary.ChannelType CHANNEL_TYPE = ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00; 
+        static readonly ANT_ReferenceLibrary.ChannelType CHANNEL_TYPE = ANT_ReferenceLibrary.ChannelType.ADV_TxRx_Only_or_RxAlwaysWildCard_0x40; 
         
         /// <summary>
         /// The public network number.
@@ -39,8 +39,11 @@ namespace ANTBridge
         /// <summary>
         /// Initialize the Device and Channel controlled by this ANTListener.
         /// </summary>
-        public ANTListener()
+        public ANTListener(Action<ANT_Response> rxDelegate)
         {
+            // Assign our RxDelegate to whatever is passed in.
+            RxDelegate = rxDelegate;
+
             // Automatically find and connect connect ANT USB device.
             Console.Write("Initializing ANT Device... ");
             try
@@ -78,10 +81,11 @@ namespace ANTBridge
             if (!Channel.setChannelID(0, false, 0, 0, 500))
                 throw new Exception("Error configuring Channel ID");
             Console.WriteLine("Done!");
-            // Open the channel
-            if(!Channel.openChannel(500))
-                throw new Exception("Error opening Channel");
-            Console.WriteLine("ANT Channel Opened!");
+
+            // Open the channel in continuous scan mode.
+            if (!Device.openRxScanMode(500))
+                throw new Exception("Error opening Channel in continuous scan mode");
+            Console.WriteLine("ANT Channel Opened in Continuous Scan Mode!");
         }
 
         /// <summary>
@@ -98,29 +102,8 @@ namespace ANTBridge
                 case ANT_ReferenceLibrary.ANTMessageID.EXT_BROADCAST_DATA_0x5D:
                 case ANT_ReferenceLibrary.ANTMessageID.EXT_ACKNOWLEDGED_DATA_0x5E:
                 case ANT_ReferenceLibrary.ANTMessageID.EXT_BURST_DATA_0x5F:
-                    Console.WriteLine(BitConverter.ToString(response.getDataPayload()));
-                    break;
-
-                // Handle ANT Channel Responses
-                case ANT_ReferenceLibrary.ANTMessageID.RESPONSE_EVENT_0x40:
-                    /**************************************
-                     * Expected data payload:
-                     * 
-                     * |0   |1   |2   |3   |
-                     * ---------------------
-                     * | C# | 1  |Evnt| ext|
-                     * ---------------------
-                     *************************************/
-                    switch ((ANT_ReferenceLibrary.ANTEventID)response.messageContents[2])
-                    {
-                        case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_SEARCH_TIMEOUT_0x01:
-                            Console.WriteLine("Unable to connect to remote channel. Re-opening channel.");
-                            Channel.openChannel(500);
-                            break;
-                        case ANT_ReferenceLibrary.ANTEventID.EVENT_RX_FAIL_0x02:
-                            Console.WriteLine("Missed an expected Rx");
-                            break;
-                    }
+                    // Pass received data off to the RxDelegate method.
+                    RxDelegate(response);
                     break;
 
                 // Display information for unrecognized messages.
@@ -154,5 +137,10 @@ namespace ANTBridge
         /// The ANT Channel that Device is currently using to connect to other ANT Nodes.
         /// </summary>
         private ANT_Channel Channel;
+
+        /// <summary>
+        /// The delegate to pass ANT_Responses to whenever data is received.
+        /// </summary>
+        private Action<ANT_Response> RxDelegate;
     }
 }

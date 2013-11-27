@@ -23,14 +23,14 @@ namespace ANTBridge
         static readonly ANT_ReferenceLibrary.ChannelType CHANNEL_TYPE = ANT_ReferenceLibrary.ChannelType.ADV_TxRx_Only_or_RxAlwaysWildCard_0x40; 
         
         /// <summary>
-        /// The public network number.
+        /// The Network Number that the Network Key will be assigned to.
         /// </summary>
         static readonly byte NETWORK_NUMBER = 0;
 
         /// <summary>
-        /// Blank network key.
+        /// The ANT+ Network Key. Allows interoperability with ANT+ devices.
         /// </summary>
-        static readonly byte[] NETWORK_KEY = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        static readonly byte[] NETWORK_KEY = { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 };
 
 
         /*********************************************************************/
@@ -71,6 +71,9 @@ namespace ANTBridge
                 Console.WriteLine("Failed!");
                 throw ex;
             }
+            // Enable reception of Extended messages.
+            if (!Device.enableRxExtendedMessages(true, 500))
+                throw new Exception("Error enabling Extendced messages");
             // Configure the Device and Channel with default values.
             Console.Write("Configuring ANT Device and Channel with default values... ");
             if (!Device.setNetworkKey(NETWORK_NUMBER, NETWORK_KEY, 500))
@@ -80,6 +83,12 @@ namespace ANTBridge
             // Set the Channel ID with wildcard values (to accept connections from any device).
             if (!Channel.setChannelID(0, false, 0, 0, 500))
                 throw new Exception("Error configuring Channel ID");
+            // Configure the Period.
+            if (!Channel.setChannelPeriod(8182, 500))
+                throw new Exception("Error setting Channel Period");
+            // Configure the Frequency.
+            if(!Channel.setChannelFreq((byte)57, 500))
+                throw new Exception("Error setting Channel Frequency");
             Console.WriteLine("Done!");
 
             // Open the channel in continuous scan mode.
@@ -118,7 +127,12 @@ namespace ANTBridge
         /// </summary>
         public void DeviceResponseHandler(ANT_Response response)
         {
-            
+            switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
+            {
+                default:
+                    Console.WriteLine("Device Response: " + response.responseID.ToString("X"));
+                    break;
+            }
         }
 
         /*********************************************************************/

@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ANTBridge.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="NetworkKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">uaUh+71yw0U=</Value>
+    </Setting>
+    <Setting Name="ChannelPeriod" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8182</Value>
+    </Setting>
+    <Setting Name="ChannelFrequency" Type="System.Int16" Scope="User">
+      <Value Profile="(Default)">57</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -5,10 +5,10 @@
     <Setting Name="NetworkKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">uaUh+71yw0U=</Value>
     </Setting>
-    <Setting Name="ChannelPeriod" Type="System.Int32" Scope="User">
+    <Setting Name="ChannelPeriod" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">8182</Value>
     </Setting>
-    <Setting Name="ChannelFrequency" Type="System.Int16" Scope="User">
+    <Setting Name="ChannelFrequency" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">57</Value>
     </Setting>
   </Settings>

@@ -14,9 +14,12 @@ namespace ANTBridge
         /// <summary>
         /// Initialize the ANTListener and IPSender.
         /// </summary>
-        public ANTBridge()
+        /// <param name="networkKey">The Network Key to pass to ANTListener.</param>
+        /// <param name="channelPeriod">The Channel Period to pass to ANTListener.</param>
+        /// <param name="channelFrequency">The Channel Frequency to pass along to ANTListener.</param>
+        public ANTBridge(byte[] networkKey, ushort channelPeriod, byte channelFrequency)
         {
-            Listener = new ANTListener(this.ANTListenerDelegate);
+            Listener = new ANTListener(networkKey, channelPeriod, channelFrequency, this.ANTListenerDelegate);
         }
 
         /// <summary>

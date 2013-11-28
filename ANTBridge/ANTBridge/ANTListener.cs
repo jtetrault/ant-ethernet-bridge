@@ -27,20 +27,34 @@ namespace ANTBridge
         /// </summary>
         static readonly byte NETWORK_NUMBER = 0;
 
-        /// <summary>
-        /// The ANT+ Network Key. Allows interoperability with ANT+ devices.
-        /// </summary>
-        static readonly byte[] NETWORK_KEY = { 0xB9, 0xA5, 0x21, 0xFB, 0xBD, 0x72, 0xC3, 0x45 };
-
 
         /*********************************************************************/
         /*** Instance Methods ************************************************/
         /*********************************************************************/
         /// <summary>
-        /// Initialize the Device and Channel controlled by this ANTListener.
+        /// Initialize an ANT Device connected to this computer via USB.
+        /// The Device will be setup in Continuous Scan mode. It will be able to recieve messages from multiple master devices simultaneously.
+        /// 
         /// </summary>
-        public ANTListener(Action<ANT_Response> rxDelegate)
+        /// <param name="networkKey">
+        /// The Network Key to use when reading messages. Without the correct network key, messages will not be read.
+        /// An exception will be thrown if the array is not exactly 80 bytes long.
+        /// </param>
+        /// <param name="channelPeriod">The Channel Period to use for the receiver.</param>
+        /// <param name="channelFrequency">
+        /// The Frequency to add to the base frequency (2400) to compute the frequency that the receiver should operate on.
+        /// The ANT+ frequency is 57.
+        /// An exception will be thrown if the value is not between 0 and 124 inclusive.
+        /// </param>
+        /// <param name="rxDelegate">The delegate method that will be called every time a transmission is received.</param>
+        public ANTListener(byte[] networkKey, ushort channelPeriod, byte channelFrequency, Action<ANT_Response> rxDelegate)
         {
+            // Validate networkKey and channelPeriod.
+            if (networkKey.Length != 8)
+                throw new Exception("Network Key is not exactly 8 bytes long");
+            if (channelFrequency < 0 || channelFrequency > 124)
+                throw new Exception("Channel Period is not in range 0 - 124");
+
             // Assign our RxDelegate to whatever is passed in.
             RxDelegate = rxDelegate;
 
@@ -76,7 +90,7 @@ namespace ANTBridge
                 throw new Exception("Error enabling Extendced messages");
             // Configure the Device and Channel with default values.
             Console.Write("Configuring ANT Device and Channel with default values... ");
-            if (!Device.setNetworkKey(NETWORK_NUMBER, NETWORK_KEY, 500))
+            if (!Device.setNetworkKey(NETWORK_NUMBER, networkKey, 500))
                 throw new Exception("Error configuring network key");
             if (!Channel.assignChannel(CHANNEL_TYPE, NETWORK_NUMBER, 500))
                 throw new Exception("Error assigning channel");
@@ -84,10 +98,10 @@ namespace ANTBridge
             if (!Channel.setChannelID(0, false, 0, 0, 500))
                 throw new Exception("Error configuring Channel ID");
             // Configure the Period.
-            if (!Channel.setChannelPeriod(8182, 500))
+            if (!Channel.setChannelPeriod(channelPeriod, 500))
                 throw new Exception("Error setting Channel Period");
             // Configure the Frequency.
-            if(!Channel.setChannelFreq((byte)57, 500))
+            if(!Channel.setChannelFreq(channelFrequency, 500))
                 throw new Exception("Error setting Channel Frequency");
             Console.WriteLine("Done!");
 

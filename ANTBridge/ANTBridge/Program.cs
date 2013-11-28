@@ -11,10 +11,18 @@ namespace ANTBridge
     {
         static void Main(string[] args)
         {
+            byte[] networkKey;
+            ushort channelPeriod;
+            byte channelFrequency;
+
             try
             {
-                ANTBridge bridge = new ANTBridge();
+                // Pull Channel Period settings from the settings file.
+                networkKey = Convert.FromBase64String(Properties.Settings.Default.NetworkKey);
+                channelPeriod = Properties.Settings.Default.ChannelPeriod;
+                channelFrequency = Properties.Settings.Default.ChannelFrequency;
 
+                ANTBridge bridge = new ANTBridge(networkKey, channelPeriod, channelFrequency);
 
                 while (true)
                 {

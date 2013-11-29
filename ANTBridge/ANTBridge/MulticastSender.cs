@@ -26,6 +26,9 @@ namespace ANTBridge
             EndPoint = new IPEndPoint(multicastAddress, port);
         }
 
+        /// <summary>
+        /// Sends a byte[] to the multicast group initialized in the constructor.
+        /// </summary>
         public void Send(byte[] message)
         {
             UdpLink.Send(message, message.Length, EndPoint);

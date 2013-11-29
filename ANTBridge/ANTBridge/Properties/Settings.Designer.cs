@@ -58,5 +58,29 @@ namespace ANTBridge.Properties {
                 this["ChannelFrequency"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("239.0.0.222")]
+        public string MulticastAddress {
+            get {
+                return ((string)(this["MulticastAddress"]));
+            }
+            set {
+                this["MulticastAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2222")]
+        public ushort MulticastPort {
+            get {
+                return ((ushort)(this["MulticastPort"]));
+            }
+            set {
+                this["MulticastPort"] = value;
+            }
+        }
     }
 }

@@ -11,5 +11,11 @@
     <Setting Name="ChannelFrequency" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">57</Value>
     </Setting>
+    <Setting Name="MulticastAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">239.0.0.222</Value>
+    </Setting>
+    <Setting Name="MulticastPort" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">2222</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

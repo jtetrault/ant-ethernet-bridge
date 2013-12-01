@@ -63,7 +63,6 @@ namespace ANTBridge
             try
             {
                 Device = new ANT_Device();
-                Device.deviceResponse += new ANT_Device.dDeviceResponseHandler(this.DeviceResponseHandler);
                 Console.WriteLine("Done!");
             }
             catch (ANT_Exception ex)
@@ -135,23 +134,6 @@ namespace ANTBridge
                     break;
             }
         }
-
-        /// <summary>
-        /// Handle ANT Device responses.
-        /// </summary>
-        public void DeviceResponseHandler(ANT_Response response)
-        {
-            switch ((ANT_ReferenceLibrary.ANTMessageID)response.responseID)
-            {
-                default:
-                    Console.WriteLine("Device Response: " + response.responseID.ToString("X"));
-                    break;
-            }
-        }
-
-        /*********************************************************************/
-        /*** Internal Methods ************************************************/
-        /*********************************************************************/
 
         /*********************************************************************/
         /*** Instance Variables **********************************************/

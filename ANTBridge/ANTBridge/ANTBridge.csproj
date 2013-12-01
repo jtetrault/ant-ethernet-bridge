@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="ANTBridge.cs" />
     <Compile Include="ANTListener.cs" />
+    <Compile Include="MulticastSender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

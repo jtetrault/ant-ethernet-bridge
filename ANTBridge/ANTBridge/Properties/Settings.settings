@@ -17,5 +17,8 @@
     <Setting Name="MulticastPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">2222</Value>
     </Setting>
+    <Setting Name="Verbose" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

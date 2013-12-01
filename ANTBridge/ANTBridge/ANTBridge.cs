@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,22 @@ namespace ANTBridge
 {
     class ANTBridge
     {
+
+        /*********************************************************************/
+        /*** Class Variables and Constants ***********************************/
+        /*********************************************************************/
+        /// <summary>
+        /// The number of bytes needed for the payload of each ANT message.
+        /// </summary>
+        static readonly byte ANT_PAYLOAD_LENGTH = 8;
+
+        /// <summary>
+        /// The number of bytes needed for the Device ID of each ANT message.
+        /// Consists of deviceNumber (ushort), deviceTypeID (byte), and transmissionTypeID (byte).
+        /// pairingBit (bool) is ignored.
+        /// </summary>
+        static readonly byte ANT_DEVICE_ID_LENGTH = 4;
+
         /*********************************************************************/
         /*** Instance Methods ************************************************/
         /*********************************************************************/
@@ -17,29 +34,76 @@ namespace ANTBridge
         /// <param name="networkKey">The Network Key to pass to ANTListener.</param>
         /// <param name="channelPeriod">The Channel Period to pass to ANTListener.</param>
         /// <param name="channelFrequency">The Channel Frequency to pass along to ANTListener.</param>
-        public ANTBridge(byte[] networkKey, ushort channelPeriod, byte channelFrequency)
+        /// <param name="multicastAddress">The multicast IP address of the multicast group to send messages to.</param>
+        /// <param name="multicastPort">The port to send messages to.</param>
+        /// <param name="verbose">Determines if messages should be written to Console as events happen.</param>
+        public ANTBridge(byte[] networkKey, ushort channelPeriod, byte channelFrequency, IPAddress multicastAddress, ushort multicastPort, bool verbose)
         {
             Listener = new ANTListener(networkKey, channelPeriod, channelFrequency, this.ANTListenerDelegate);
+            Sender = new MulticastSender(multicastAddress, multicastPort);
+            Message = new byte[ANT_PAYLOAD_LENGTH + ANT_DEVICE_ID_LENGTH];
+            Verbose = verbose;
         }
 
         /// <summary>
-        /// Receives ANT messages from ANTListener and passes them off to IPSender.
+        /// Receives ANT messages from ANTListener and passes them off to MulticastSender.
         /// </summary>
         /// <param name="response"></param>
         public void ANTListenerDelegate(ANT_Managed_Library.ANT_Response response)
         {
-            Console.WriteLine(BitConverter.ToString(response.getDataPayload()));
+            // Build the message to send.
+            // Copy the payload over.
+            Array.Copy(response.getDataPayload(), Message, ANT_PAYLOAD_LENGTH);
             if (response.isExtended())
             {
-                ANT_Managed_Library.ANT_ChannelID channelID = response.getDeviceIDfromExt();
-                Console.WriteLine("Device ID: {0:D}-{1:D}-{2:D}", channelID.deviceNumber, channelID.deviceTypeID, channelID.transmissionTypeID);
+                // Copy extended information into Message immediately after the payload.
+                ANT_Managed_Library.ANT_ChannelID deviceID = response.getDeviceIDfromExt();
+                Message[ANT_PAYLOAD_LENGTH] = (byte)(deviceID.deviceNumber);
+                Message[ANT_PAYLOAD_LENGTH + 1] = (byte)(deviceID.deviceNumber >> 8);
+                Message[ANT_PAYLOAD_LENGTH + 2] = deviceID.deviceTypeID;
+                Message[ANT_PAYLOAD_LENGTH + 3] = deviceID.transmissionTypeID;
             }
+            else // Clear the DeviceID info from any previous Messages.
+                Array.Clear(Message, ANT_PAYLOAD_LENGTH, ANT_DEVICE_ID_LENGTH);
+
+            // Print the message on the Console if desired.
+            if (Verbose)
+            {
+                Console.WriteLine("Received Payload: " + BitConverter.ToString(Message, 0, ANT_PAYLOAD_LENGTH));
+                if (response.isExtended())
+                {
+                    ANT_Managed_Library.ANT_ChannelID channelID = response.getDeviceIDfromExt();
+                    Console.WriteLine("Device ID: {0:D}-{1:D}-{2:D}",
+                        BitConverter.ToUInt16(Message, ANT_PAYLOAD_LENGTH),
+                        Message[ANT_PAYLOAD_LENGTH + 2],
+                        Message[ANT_PAYLOAD_LENGTH + 3]);
+                }
+            }
+            Sender.Send(response.getDataPayload());
         }
 
         /*********************************************************************/
         /*** Instance Variables **********************************************/
         /*********************************************************************/
 
+        /// <summary>
+        /// Listens for ANT messages and relays them to ANTListenerDelegate().
+        /// </summary>
         private ANTListener Listener;
+
+        /// <summary>
+        /// Sends messages to the preconfigured multicast group.
+        /// </summary>
+        private MulticastSender Sender;
+
+        /// <summary>
+        /// Holds the message to pass to Sender.
+        /// </summary>
+        private byte[] Message;
+
+        /// <summary>
+        /// Determines if messages should be written to console as events happen.
+        /// </summary>
+        private bool Verbose;
     }
 }

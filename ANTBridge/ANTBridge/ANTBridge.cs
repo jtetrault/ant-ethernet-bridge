@@ -5,6 +5,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
+using ANTResponseFormatter;
+
 namespace ANTBridge
 {
     class ANTBridge
@@ -69,17 +71,9 @@ namespace ANTBridge
             // Print the message on the Console if desired.
             if (Verbose)
             {
-                Console.WriteLine("Received Payload: " + BitConverter.ToString(Message, 0, ANT_PAYLOAD_LENGTH));
-                if (response.isExtended())
-                {
-                    ANT_Managed_Library.ANT_ChannelID channelID = response.getDeviceIDfromExt();
-                    Console.WriteLine("Device ID: {0:D}-{1:D}-{2:D}",
-                        BitConverter.ToUInt16(Message, ANT_PAYLOAD_LENGTH),
-                        Message[ANT_PAYLOAD_LENGTH + 2],
-                        Message[ANT_PAYLOAD_LENGTH + 3]);
-                }
+                Console.WriteLine(ANTResponseFormatter.Formatter.FormatMessage(Message));
             }
-            Sender.Send(response.getDataPayload());
+            Sender.Send(Message);
         }
 
         /*********************************************************************/

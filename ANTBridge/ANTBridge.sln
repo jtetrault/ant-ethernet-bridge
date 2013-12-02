@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTBridge", "ANTBridge\ANTB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MulticastListener", "MulticastListener\MulticastListener.csproj", "{65E6F44B-3E90-4884-8E84-6AE9210AF74C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTResponseFormatter", "ANTResponsePrinter\ANTResponseFormatter.csproj", "{99268509-AEB8-488F-835D-A0A57F12FE41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,16 @@ Global
 		{65E6F44B-3E90-4884-8E84-6AE9210AF74C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{65E6F44B-3E90-4884-8E84-6AE9210AF74C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65E6F44B-3E90-4884-8E84-6AE9210AF74C}.Release|x86.ActiveCfg = Release|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{99268509-AEB8-488F-835D-A0A57F12FE41}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="NetworkKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">uaUh+71yw0U=</Value>
+      <Value Profile="(Default)">B9A521FBBD72C345</Value>
     </Setting>
     <Setting Name="ChannelPeriod" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">8182</Value>

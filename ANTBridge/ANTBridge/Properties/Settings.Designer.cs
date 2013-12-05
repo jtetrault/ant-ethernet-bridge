@@ -25,7 +25,7 @@ namespace ANTBridge.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("uaUh+71yw0U=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("B9A521FBBD72C345")]
         public string NetworkKey {
             get {
                 return ((string)(this["NetworkKey"]));

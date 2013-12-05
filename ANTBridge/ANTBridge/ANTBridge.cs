@@ -42,7 +42,17 @@ namespace ANTBridge
         public ANTBridge(byte[] networkKey, ushort channelPeriod, byte channelFrequency, IPAddress multicastAddress, ushort multicastPort, bool verbose)
         {
             Listener = new ANTListener(networkKey, channelPeriod, channelFrequency, this.ANTListenerDelegate);
+            Console.WriteLine("Listening for ANT Messages:\nNetwork Key:\t{0}\nChannel Period:\t{1}\nChannel Freq.:\t{2}\n",
+                BitConverter.ToString(networkKey),
+                channelPeriod,
+                channelFrequency);
+
+
             Sender = new MulticastSender(multicastAddress, multicastPort);
+            Console.WriteLine("Sending Multicast Messages to {0}:{1}\n",
+                multicastAddress.ToString(),
+                multicastPort);
+
             Message = new byte[ANT_PAYLOAD_LENGTH + ANT_DEVICE_ID_LENGTH];
             Verbose = verbose;
         }

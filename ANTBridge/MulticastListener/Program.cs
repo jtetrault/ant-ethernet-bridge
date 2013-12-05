@@ -23,31 +23,42 @@ namespace MulticastListener
 
         static void Main(string[] args)
         {
-            UdpClient client = new UdpClient();
-            IPEndPoint localEp = new IPEndPoint(IPAddress.Any, Properties.Settings.Default.multicastPort);
-            client.Client.Bind(localEp);
-
-            IPAddress multicastAddress = IPAddress.Parse(Properties.Settings.Default.multicastAddress);
-            client.JoinMulticastGroup(multicastAddress);
-
-            byte[] message = new byte[ANT_MESSAGE_LENGTH];
-
-            while (true)
+            try
             {
-                byte[] tempMessage = client.Receive(ref localEp);
+                UdpClient client = new UdpClient();
+                IPEndPoint localEp = new IPEndPoint(IPAddress.Any, Properties.Settings.Default.multicastPort);
+                client.Client.Bind(localEp);
 
-                // Clear out the message buffer, and then write at most message.Length bytes into it.
-                // Then print out the message using ANTResponseFormatter.
-                Array.Clear(message, 0, message.Length);
-                Array.Copy(tempMessage, message, Math.Max(tempMessage.Length, message.Length));
-                try
+                IPAddress multicastAddress = IPAddress.Parse(Properties.Settings.Default.multicastAddress);
+                client.JoinMulticastGroup(multicastAddress);
+
+                byte[] message = new byte[ANT_MESSAGE_LENGTH];
+
+                Console.WriteLine("Listening for Multicast Messages on {0}:{1}\n",
+                    Properties.Settings.Default.multicastAddress,
+                    Properties.Settings.Default.multicastPort);
+
+                while (true)
                 {
-                    Console.WriteLine(ANTResponseFormatter.Formatter.FormatMessage(message));
+                    byte[] tempMessage = client.Receive(ref localEp);
+
+                    // Clear out the message buffer, and then write at most message.Length bytes into it.
+                    // Then print out the message using ANTResponseFormatter.
+                    Array.Clear(message, 0, message.Length);
+                    Array.Copy(tempMessage, message, Math.Max(tempMessage.Length, message.Length));
+                    try
+                    {
+                        Console.WriteLine(ANTResponseFormatter.Formatter.FormatMessage(message));
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+            }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                Console.WriteLine("A Socket Exception has occured: " + Environment.NewLine + ex.Message);
             }
         }
     }

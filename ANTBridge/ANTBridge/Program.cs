@@ -41,6 +41,10 @@ namespace ANTBridge
             {
                 Console.WriteLine("An ANT Exception has occured: " + Environment.NewLine + ex.Message);
             }
+            catch (System.Net.Sockets.SocketException ex)
+            {
+                Console.WriteLine("A Socket Exception has occured: " + Environment.NewLine + ex.Message);
+            }
             Console.WriteLine("Exiting...");
         }
     }

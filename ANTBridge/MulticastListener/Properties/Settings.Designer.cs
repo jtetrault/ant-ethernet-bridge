@@ -26,24 +26,24 @@ namespace MulticastListener.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("239.0.0.222")]
-        public string multicastAddress {
+        public string MulticastAddress {
             get {
-                return ((string)(this["multicastAddress"]));
+                return ((string)(this["MulticastAddress"]));
             }
             set {
-                this["multicastAddress"] = value;
+                this["MulticastAddress"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2222")]
-        public ushort multicastPort {
+        public ushort MulticastPort {
             get {
-                return ((ushort)(this["multicastPort"]));
+                return ((ushort)(this["MulticastPort"]));
             }
             set {
-                this["multicastPort"] = value;
+                this["MulticastPort"] = value;
             }
         }
     }

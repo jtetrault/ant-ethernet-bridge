@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MulticastListener.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="multicastAddress" Type="System.String" Scope="User">
+    <Setting Name="MulticastAddress" Type="System.String" Scope="User">
       <Value Profile="(Default)">239.0.0.222</Value>
     </Setting>
-    <Setting Name="multicastPort" Type="System.UInt16" Scope="User">
+    <Setting Name="MulticastPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">2222</Value>
     </Setting>
   </Settings>

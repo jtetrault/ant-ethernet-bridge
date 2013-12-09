@@ -11,6 +11,8 @@ namespace ANTBridge
 {
     class Program
     {
+        const string VALID_SETTINGS_MESSAGE = "Setting must be one of: key, period, frequency, address, port, verbose";
+
         static void Main(string[] args)
         {
             byte[] networkKey;
@@ -22,7 +24,7 @@ namespace ANTBridge
 
             switch (args.Length)
             {
-                case 0: // Run ANTBridge
+                case 0: // Run ANTBridge.
                     try
                     {
                         // Pull Channel Period settings from the settings file.
@@ -53,14 +55,14 @@ namespace ANTBridge
                     Console.WriteLine("Exiting...");
                     break;
 
-                case 2: // Change a configuration setting
+                case 2: // Change a configuration setting.
                     string setting = args[0];
                     string value = args[1];
 
                     try
                     {
                         string message;
-                        // Determine which setting is being changed and parse the value
+                        // Determine which setting is being changed and parse the value.
                         switch (setting)
                         {
                             case "key":
@@ -103,7 +105,7 @@ namespace ANTBridge
                                 break;
 
                             default:
-                                message = String.Format("No setting matches {0}", setting);
+                                message = String.Format("No setting matches {0}\n{1}", setting, VALID_SETTINGS_MESSAGE);
                                 break;
                         }
 
@@ -119,10 +121,10 @@ namespace ANTBridge
                     }
                     break;
 
-                default:
+                default: // Print usage statement.
                     string programName = Environment.GetCommandLineArgs()[0];
                     Console.WriteLine("Usage: {0} [setting value]", programName);
-                    Console.WriteLine("setting must be one of:\nkey, period, frequency, address, port, verbose");
+                    Console.WriteLine(VALID_SETTINGS_MESSAGE);
                     break;
             }
         }

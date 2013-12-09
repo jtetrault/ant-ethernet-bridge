@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using ANT_Managed_Library;
@@ -39,10 +40,9 @@ namespace ANTBridge
 
                         ANTBridge bridge = new ANTBridge(networkKey, channelPeriod, channelFrequency, multicastAddress, multicastPort, verbose);
 
-                        while (true)
-                        {
-
-                        }
+                        // This thread no longer needs to do any work.
+                        // The ANT_Managed_Library code does its work in a separate thread, so we pause this thread with a Join call.
+                        Thread.CurrentThread.Join();
                     }
                     catch (ANT_Exception ex)
                     {

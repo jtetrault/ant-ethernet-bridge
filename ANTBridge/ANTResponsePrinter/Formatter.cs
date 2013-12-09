@@ -24,6 +24,9 @@ namespace ANTResponseFormatter
         /// </summary>
         private const byte ANT_DEVICE_ID_LENGTH = 4;
 
+        /*********************************************************************/
+        /*** Class Methods ***************************************************/
+        /*********************************************************************/
         /// <summary>
         /// Takes an ANT message and returns it as a string of the following format:
         /// Received Payload: XX-XX-XX-XX-XX-XX-XX-XX

@@ -87,18 +87,23 @@ namespace ANTBridge
             // Enable reception of Extended messages.
             if (!Device.enableRxExtendedMessages(true, 500))
                 throw new Exception("Error enabling Extendced messages");
-            // Configure the Device and Channel with default values.
+
+            // Configure the Device and Channel with provided settings.
             Console.Write("Configuring ANT Device and Channel with default values... ");
             if (!Device.setNetworkKey(NETWORK_NUMBER, networkKey, 500))
                 throw new Exception("Error configuring network key");
+
             if (!Channel.assignChannel(CHANNEL_TYPE, NETWORK_NUMBER, 500))
                 throw new Exception("Error assigning channel");
+
             // Set the Channel ID with wildcard values (to accept connections from any device).
             if (!Channel.setChannelID(0, false, 0, 0, 500))
                 throw new Exception("Error configuring Channel ID");
+
             // Configure the Period.
             if (!Channel.setChannelPeriod(channelPeriod, 500))
                 throw new Exception("Error setting Channel Period");
+
             // Configure the Frequency.
             if(!Channel.setChannelFreq(channelFrequency, 500))
                 throw new Exception("Error setting Channel Frequency");
@@ -112,6 +117,8 @@ namespace ANTBridge
 
         /// <summary>
         /// Handles ANT Channel events.
+        /// If the Channel event is a received messages, then the message is passed to the RxDelegate method.
+        /// Otherwise, an "Unrecognized Message" statement is output to the Console.
         /// </summary>
         public void ChannelResponseHandler(ANT_Response response)
         {

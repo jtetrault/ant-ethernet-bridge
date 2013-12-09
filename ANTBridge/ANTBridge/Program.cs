@@ -10,10 +10,23 @@ using ANT_Managed_Library;
 
 namespace ANTBridge
 {
+    /// <summary>
+    /// Main program class.
+    /// </summary>
     class Program
     {
+        /*********************************************************************/
+        /*** Class Variables and Constants ***********************************/
+        /*********************************************************************/
+        /// <summary>
+        /// A list of the valid settings that can be modified.
+        /// </summary>
         const string VALID_SETTINGS_MESSAGE = "Setting must be one of: key, period, frequency, address, port, verbose";
 
+        /// <summary>
+        /// Main program entry point.
+        /// Either creates and runs an ANTBridge, or allows a setting to be changed.
+        /// </summary>
         static void Main(string[] args)
         {
             byte[] networkKey;

@@ -15,6 +15,12 @@ namespace MulticastListener
     /// </summary>
     class Program
     {
+        /*********************************************************************/
+        /*** Class Variables and Constants ***********************************/
+        /*********************************************************************/
+        /// <summary>
+        /// A list of the valid settings that can be modified.
+        /// </summary>
         const string VALID_SETTINGS_MESSAGE = "Setting must be one of: address, port";
 
         /// <summary>
@@ -23,6 +29,11 @@ namespace MulticastListener
         /// </summary>
         private const short ANT_MESSAGE_LENGTH = 12;
 
+        /// <summary>
+        /// Main program entry point.
+        /// Runs MulticastListener, or allows for a setting to be changed.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             switch(args.Length)

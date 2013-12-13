@@ -21,7 +21,7 @@ namespace ANTBridge
         /// <summary>
         /// A list of the valid settings that can be modified.
         /// </summary>
-        const string VALID_SETTINGS_MESSAGE = "Setting must be one of: key, period, frequency, address, port, verbose";
+        const string VALID_SETTINGS_MESSAGE = "<setting> must be one of: key, frequency, address, port, verbose";
 
         /// <summary>
         /// Main program entry point.
@@ -30,7 +30,6 @@ namespace ANTBridge
         static void Main(string[] args)
         {
             byte[] networkKey;
-            ushort channelPeriod;
             byte channelFrequency;
             IPAddress multicastAddress;
             ushort multicastPort;
@@ -45,13 +44,12 @@ namespace ANTBridge
                         networkKey = BitConverter.GetBytes(UInt64.Parse(Properties.Settings.Default.NetworkKey, System.Globalization.NumberStyles.HexNumber));
                         if (BitConverter.IsLittleEndian)
                             Array.Reverse(networkKey);
-                        channelPeriod = Properties.Settings.Default.ChannelPeriod;
                         channelFrequency = Properties.Settings.Default.ChannelFrequency;
                         multicastAddress = IPAddress.Parse(Properties.Settings.Default.MulticastAddress);
                         multicastPort = Properties.Settings.Default.MulticastPort;
                         verbose = Properties.Settings.Default.Verbose;
 
-                        ANTBridge bridge = new ANTBridge(networkKey, channelPeriod, channelFrequency, multicastAddress, multicastPort, verbose);
+                        ANTBridge bridge = new ANTBridge(networkKey, channelFrequency, multicastAddress, multicastPort, verbose);
 
                         // This thread no longer needs to do any work.
                         // The ANT_Managed_Library code does its work in a separate thread, so we pause this thread with a Join call.
@@ -74,7 +72,7 @@ namespace ANTBridge
 
                 default: // Print usage statement.
                     string programName = Environment.GetCommandLineArgs()[0];
-                    Console.WriteLine("Usage: {0} [setting value]", programName);
+                    Console.WriteLine("Usage: {0} [<setting> <value>]", programName);
                     Console.WriteLine(VALID_SETTINGS_MESSAGE);
                     break;
             }
@@ -97,12 +95,6 @@ namespace ANTBridge
                             Array.Reverse(networkKey);
                         Properties.Settings.Default.NetworkKey = BitConverter.ToString(networkKey).Replace("-","");
                         message = "Network Key changed to " + BitConverter.ToString(networkKey);
-                        break;
-
-                    case "period":
-                        ushort channelPeriod = Convert.ToUInt16(value);
-                        Properties.Settings.Default.ChannelPeriod = channelPeriod;
-                        message = "Channel Period changed to " + channelPeriod;
                         break;
 
                     case "frequency":

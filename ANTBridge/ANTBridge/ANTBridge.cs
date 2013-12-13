@@ -39,12 +39,11 @@ namespace ANTBridge
         /// <param name="multicastAddress">The multicast IP address of the multicast group to send messages to.</param>
         /// <param name="multicastPort">The port to send messages to.</param>
         /// <param name="verbose">Determines if messages should be written to Console as events happen.</param>
-        public ANTBridge(byte[] networkKey, ushort channelPeriod, byte channelFrequency, IPAddress multicastAddress, ushort multicastPort, bool verbose)
+        public ANTBridge(byte[] networkKey, byte channelFrequency, IPAddress multicastAddress, ushort multicastPort, bool verbose)
         {
-            Listener = new ANTListener(networkKey, channelPeriod, channelFrequency, this.ANTListenerDelegate);
-            Console.WriteLine("Listening for ANT Messages:\nNetwork Key:\t{0}\nChannel Period:\t{1}\nChannel Freq.:\t{2}\n",
+            Listener = new ANTListener(networkKey, channelFrequency, this.ANTListenerDelegate);
+            Console.WriteLine("Listening for ANT Messages:\nNetwork Key:\t{0}\nChannel Freq.:\t{1}\n",
                 BitConverter.ToString(networkKey),
-                channelPeriod,
                 channelFrequency);
 
 
@@ -60,7 +59,6 @@ namespace ANTBridge
         /// <summary>
         /// Receives ANT messages from ANTListener and passes them off to MulticastSender.
         /// </summary>
-        /// <param name="response"></param>
         public void ANTListenerDelegate(ANT_Managed_Library.ANT_Response response)
         {
             // Build the message to send.

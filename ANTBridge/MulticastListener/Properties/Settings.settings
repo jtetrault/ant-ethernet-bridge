@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="MulticastAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">239.0.0.222</Value>
+      <Value Profile="(Default)">224.1.0.0</Value>
     </Setting>
     <Setting Name="MulticastPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">2222</Value>

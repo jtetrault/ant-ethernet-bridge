@@ -21,7 +21,7 @@ namespace MulticastListener
         /// <summary>
         /// A list of the valid settings that can be modified.
         /// </summary>
-        const string VALID_SETTINGS_MESSAGE = "Setting must be one of: address, port";
+        const string VALID_SETTINGS_MESSAGE = "<setting> must be one of: address, port";
 
         /// <summary>
         /// The length of an ANT message.
@@ -80,7 +80,7 @@ namespace MulticastListener
 
                 default:// Print usage statement.
                     string programName = Environment.GetCommandLineArgs()[0];
-                    Console.WriteLine("Usage: {0} [setting value]", programName);
+                    Console.WriteLine("Usage: {0} [<setting> <value>]", programName);
                     Console.WriteLine(VALID_SETTINGS_MESSAGE);
                     break;
             }

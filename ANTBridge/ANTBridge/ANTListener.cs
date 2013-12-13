@@ -40,20 +40,19 @@ namespace ANTBridge
         /// The Network Key to use when reading messages. Without the correct network key, messages will not be read.
         /// An exception will be thrown if the array is not exactly 80 bytes long.
         /// </param>
-        /// <param name="channelPeriod">The Channel Period to use for the receiver.</param>
         /// <param name="channelFrequency">
         /// The Frequency to add to the base frequency (2400) to compute the frequency that the receiver should operate on.
         /// The ANT+ frequency is 57.
         /// An exception will be thrown if the value is not between 0 and 124 inclusive.
         /// </param>
         /// <param name="rxDelegate">The delegate method that will be called every time a transmission is received.</param>
-        public ANTListener(byte[] networkKey, ushort channelPeriod, byte channelFrequency, Action<ANT_Response> rxDelegate)
+        public ANTListener(byte[] networkKey, byte channelFrequency, Action<ANT_Response> rxDelegate)
         {
             // Validate networkKey and channelPeriod.
             if (networkKey.Length != 8)
                 throw new Exception("Network Key is not exactly 8 bytes long");
             if (channelFrequency < 0 || channelFrequency > 124)
-                throw new Exception("Channel Period is not in range 0 - 124");
+                throw new Exception("Channel Frequency is not in range 0 - 124");
 
             // Assign our RxDelegate to whatever is passed in.
             RxDelegate = rxDelegate;
@@ -99,10 +98,6 @@ namespace ANTBridge
             // Set the Channel ID with wildcard values (to accept connections from any device).
             if (!Channel.setChannelID(0, false, 0, 0, 500))
                 throw new Exception("Error configuring Channel ID");
-
-            // Configure the Period.
-            if (!Channel.setChannelPeriod(channelPeriod, 500))
-                throw new Exception("Error setting Channel Period");
 
             // Configure the Frequency.
             if(!Channel.setChannelFreq(channelFrequency, 500))
